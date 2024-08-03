@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,4 +13,12 @@
 
 .side_icon:hover {
   border-radius: 20px;
+}
+
+.title_icon {
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.side_icon:active {
+  transform: translateY(3px);
 }

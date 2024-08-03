@@ -24,6 +24,8 @@ model Member {
 
 model Server {
   id             String   @id @default(cuid())
+  server_role    String
+  invite_code    String?
   admin_id       String
   member         Member[]
   memberId       String
