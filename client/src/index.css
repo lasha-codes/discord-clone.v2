@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 .side_icon {
-  transition: all 300ms linear;
-  border-radius: 50px;
+  transition: all 200ms linear;
+  border-radius: 26px;
+  width: 52px;
+  height: 52px;
 }
 
 .side_icon:hover {
-  border-radius: 18px;
+  border-radius: 20px;
 }
