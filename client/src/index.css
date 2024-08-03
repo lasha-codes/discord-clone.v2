@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: 'Nunito Sans', sans-serif;
+}
+
 .side_icon {
   transition: all 200ms linear;
   border-radius: 26px;
@@ -21,4 +25,5 @@
 
 .side_icon:active {
   transform: translateY(3px);
+  transition-duration: 150ms;
 }

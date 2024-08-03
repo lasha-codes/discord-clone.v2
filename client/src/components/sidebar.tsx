@@ -9,7 +9,7 @@ const SideBar = () => {
   const dispatch = useDispatch()
   const { direct_messages_open } = useSelector((state: any) => state.navigation)
   return (
-    <div className='flex w-[80px] items-center py-2 flex-col gap-2 min-h-screen bg-sidebar_color'>
+    <div className='flex w-[84px] items-center py-1.5 flex-col gap-2 min-h-screen bg-sidebar_color'>
       <div className='flex flex-col gap-2 items-center'>
         <div className='flex flex-col items-start'>
           <h4 className='title_icon font-extrabold text-[13px] text-[#bcbec0] mb-2'>
@@ -27,8 +27,8 @@ const SideBar = () => {
         <div className='w-[33px] bg-bg_color h-[2px]'></div>
       </div>
       <div className='flex flex-col items-start gap-3'></div>
-      <div className='side_icon flex items-center justify-center cursor-pointer bg-bg_color group hover:bg-[#25a712]'>
-        <LuPlus className='text-[#287E29] text-2xl group-hover:text-white !transition-none' />
+      <div className='side_icon flex items-center justify-center cursor-pointer bg-bg_color group hover:bg-[#9aee8fb6]'>
+        <LuPlus className='text-[#287e29] text-2xl group-hover:text-white !transition-none' />
       </div>
     </div>
   )

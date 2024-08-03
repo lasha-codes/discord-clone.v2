@@ -7,6 +7,7 @@ export default {
         sidebar_color: '#2C2F33',
         bg_color: '#424549',
         discord_color: '#5D6CFF',
+        second_bar_color: '#36393E',
       },
     },
   },
