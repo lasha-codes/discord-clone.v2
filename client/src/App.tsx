@@ -1,5 +1,11 @@
+import SideBar from './components/sidebar'
+
 const App = () => {
-  return <div className='bg-blue-500'>This is where discord clone goes</div>
+  return (
+    <div className='flex items-start bg-bg_color min-h-screen'>
+      <SideBar />
+    </div>
+  )
 }
 
 export default App
