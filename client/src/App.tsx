@@ -1,12 +1,13 @@
-import SideScreen from './components/side_screen'
-import SideBar from './components/sidebar'
+import { Routes, Route } from 'react-router-dom'
+import MainPage from './main_page'
+import LoginPage from './authentication/pages/login'
 
 const App = () => {
   return (
-    <div className='flex items-start bg-sidebar_color min-h-screen'>
-      <SideBar />
-      <SideScreen />
-    </div>
+    <Routes>
+      <Route path='/' element={<MainPage />} />
+      <Route path='/login' element={<LoginPage />} />
+    </Routes>
   )
 }
 
