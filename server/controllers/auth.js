@@ -56,3 +56,21 @@ export const login = async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 }
+
+export const get_member_info = async (req, res) => {
+  const { token } = req.cookies
+  if (!token) {
+    return
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, tokenData) => {
+    const { member } = tokenData
+    if (err) {
+      return res.status(500).json({ error: err })
+    }
+    res.status(200).json({ member })
+  })
+  try {
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
