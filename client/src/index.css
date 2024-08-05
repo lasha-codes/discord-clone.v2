@@ -40,6 +40,6 @@
 }
 
 .date_picker::-webkit-scrollbar-thumb {
-  background-color: rgb(31, 30, 30);
+  background-color: #1f1e1e;
   border-radius: 25%;
 }
