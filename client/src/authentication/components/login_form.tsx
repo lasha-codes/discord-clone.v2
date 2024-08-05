@@ -6,7 +6,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState<string>('')
 
   return (
-    <div className='bg-[#313338] rounded-md px-7 py-6 z-[50] absolute w-[500px] top-1/4 flex left-1/2 translate-x-[-50%] flex-col items-center gap-4'>
+    <div className='bg-[#313338] rounded-md px-8 py-10 z-[50] absolute w-[500px] top-1/4 flex left-1/2 translate-x-[-50%] flex-col items-center gap-4'>
       <div className='flex flex-col items-center gap-2'>
         <h3 className='font-medium text-2xl text-white'>Welcome back!</h3>
         <p className='text-[#969BA1]'>We're so excited to see you again!</p>

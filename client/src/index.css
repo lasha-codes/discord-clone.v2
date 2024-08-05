@@ -27,3 +27,19 @@
   transform: translateY(3px);
   transition-duration: 150ms;
 }
+
+.date_picker::-webkit-scrollbar {
+  width: 5px;
+}
+
+.date_picker::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 25%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.date_picker::-webkit-scrollbar-thumb {
+  background-color: rgb(31, 30, 30);
+  border-radius: 25%;
+}
