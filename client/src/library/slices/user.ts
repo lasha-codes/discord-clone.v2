@@ -6,18 +6,20 @@ import axios from 'axios'
 type initialState = {
   account: null | any
   loading: boolean
+  tokens: any[]
 }
 
 const initial_state: initialState = {
   account: null,
   loading: false,
+  tokens: [],
 }
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {
   try {
     const {
       data: { member },
-    } = await axios.get('/auth/get_member_info')
+    } = await axios.get('auth/get_member')
     return member
   } catch (err: any) {
     console.log(err.message)
