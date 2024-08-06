@@ -160,3 +160,27 @@ export const verify_member = async (req, res) => {
     console.log(err.message)
   }
 }
+
+export const get_token = async (req, res) => {
+  const { token } = req.cookies
+  if (token) {
+    return res.status(401).json({ message: 'Unauthorized request' })
+  }
+  try {
+    const {
+      member: { id },
+    } = jwt.verify(token, process.env.JWT_SECRET)
+
+    const members_email_token = await db.token.findFirst({
+      where: { userId: id },
+    })
+
+    if (!members_email_token) {
+      return res.status(200).json({ token: null })
+    } else {
+      return res.status(200).json({ token: members_email_token })
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}

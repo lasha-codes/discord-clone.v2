@@ -6,13 +6,13 @@ import axios from 'axios'
 type initialState = {
   account: null | any
   loading: boolean
-  tokens: any[]
+  tokens: string | null
 }
 
 const initial_state: initialState = {
   account: null,
   loading: false,
-  tokens: [],
+  tokens: null,
 }
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {
