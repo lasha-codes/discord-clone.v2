@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import db from '../database/db.js'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
+import crypto from 'crypto'
 
 export const register_account = async (req, res) => {
   const { username, email, password, nickname, birth_date } = req.body
@@ -79,28 +80,52 @@ export const get_member_info = async (req, res) => {
 }
 
 export const verify_email = async (req, res) => {
+  const { token } = req.cookies
   try {
-    const { email, subject, text } = req.body
-    const transporter = nodemailer.createTransport({
-      host: process.env.HOST,
-      service: process.env.SERVICE,
-      post: Number(process.env.EMAIL_PORT),
-      secure: Boolean(process.env.SECURE),
-      auth: {
-        user: process.env.USER,
-        pass: process.env.PASS,
+    const sendEmail = async (email, subject, text) => {
+      const transporter = nodemailer.createTransport({
+        host: process.env.HOST,
+        service: process.env.SERVICE,
+        post: Number(process.env.EMAIL_PORT),
+        secure: Boolean(process.env.SECURE),
+        auth: {
+          user: process.env.USER,
+          pass: process.env.PASS,
+        },
+      })
+
+      await transporter.sendMail({
+        from: process.env.USER,
+        to: email,
+        subject: subject,
+        text: text,
+      })
+    }
+
+    const {
+      member: { id },
+    } = jwt.verify(token, process.env.JWT_SECRET)
+
+    const memberInDb = await db.member.findUnique({ where: { id: id } })
+
+    const created_token = await db.token.create({
+      data: {
+        userId: memberInDb.id,
+        token: crypto.randomBytes(32).toString('hex'),
       },
     })
 
-    await transporter.sendMail({
-      from: process.env.USER,
-      to: email,
-      subject: subject,
-      text: text,
-    })
+    const url = `${process.env.BASE_URL}/users/${memberInDb.id}/verify/${created_token.token}`
+    await sendEmail(memberInDb.email, 'Verify Email', url)
+
+    res
+      .status(201)
+      .json({ message: 'An email sent to your account please verify' })
 
     console.log('Email sent successfully')
   } catch (err) {
+    console.log('Email not sent')
+    console.log(err)
     res.status(500).json({ message: err.message })
   }
 }

@@ -23,6 +23,7 @@ model Member {
   birth_date   String
   phone_number String?
   servers      Server[]
+  verified     Boolean  @default(false)
 }
 
 model Server {
@@ -34,4 +35,11 @@ model Server {
   memberId       String
   voice_channels Json[]
   text_channels  Json[]
+}
+
+model Token {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String
+  createdAt DateTime @default(now())
 }
