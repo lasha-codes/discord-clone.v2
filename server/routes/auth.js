@@ -1,5 +1,9 @@
 import express from 'express'
-import { register_account, login, get_member_info } from '../controllers/auth'
+import {
+  register_account,
+  login,
+  get_member_info,
+} from '../controllers/auth.js'
 
 const router = express.Router()
 

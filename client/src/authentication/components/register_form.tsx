@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import DatePicker from './date_picker'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterForm = () => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState<string | number>('')
   const [password, setPassword] = useState<string>('')
   const [nickname, setNickname] = useState<string>('')
@@ -47,12 +50,35 @@ const RegisterForm = () => {
     1880, 1879, 1878, 1877, 1876, 1875, 1874, 1873, 1872,
   ]
 
+  const registerUser = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      await axios.post('/auth/register', {
+        username,
+        email,
+        password,
+        birth_date: `${day} - ${month} - ${year}`,
+        nickname,
+      })
+      setEmail('')
+      setPassword('')
+      setNickname('')
+      setUsername('')
+      setDay(null)
+      setMonth(null)
+      setYear(null)
+      navigate('/')
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className='bg-[#313338] rounded-md px-8 py-10 z-[50] absolute w-[500px] top-1/4 flex left-1/2 translate-x-[-50%] flex-col items-center gap-4'>
       <div className='flex flex-col items-center gap-2'>
         <h3 className='font-medium text-2xl text-white'>Create an account</h3>
       </div>
-      <form className='w-full flex flex-col gap-4'>
+      <form onSubmit={registerUser} className='w-full flex flex-col gap-4'>
         <div className='flex flex-col items-start gap-1.5 w-full'>
           <label
             htmlFor='email_phone'

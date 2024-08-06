@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
 import db from '../database/db.js'
 import bcrypt from 'bcryptjs'
+import nodemailer from 'nodemailer'
 
 export const register_account = async (req, res) => {
-  const { username, email, password } = req.body
+  const { username, email, password, nickname, birth_date } = req.body
   const user_exists = await db.member.findUnique({ where: { email } })
   if (user_exists) {
     // TODO: custom discord error
@@ -16,7 +17,9 @@ export const register_account = async (req, res) => {
     data: {
       username,
       email,
-      hashed_password,
+      password: hashed_password,
+      display_name: nickname,
+      birth_date,
     },
   })
   jwt.sign({ member: created_member }, process.env.JWT_SECRET, (err, token) => {
@@ -70,6 +73,33 @@ export const get_member_info = async (req, res) => {
     res.status(200).json({ member })
   })
   try {
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
+export const verify_email = async (req, res) => {
+  try {
+    const { email, subject, text } = req.body
+    const transporter = nodemailer.createTransport({
+      host: process.env.HOST,
+      service: process.env.SERVICE,
+      post: Number(process.env.EMAIL_PORT),
+      secure: Boolean(process.env.SECURE),
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASS,
+      },
+    })
+
+    await transporter.sendMail({
+      from: process.env.USER,
+      to: email,
+      subject: subject,
+      text: text,
+    })
+
+    console.log('Email sent successfully')
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
