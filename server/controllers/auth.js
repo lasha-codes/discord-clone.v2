@@ -66,12 +66,19 @@ export const get_member_info = async (req, res) => {
   if (!token) {
     return
   }
-  jwt.verify(token, process.env.JWT_SECRET, (err, tokenData) => {
-    const { member } = tokenData
+  jwt.verify(token, process.env.JWT_SECRET, async (err, tokenData) => {
+    const {
+      member: { id },
+    } = tokenData
     if (err) {
       return res.status(500).json({ error: err })
     }
-    res.status(200).json({ member })
+    const memberInDb = await db.member.findUnique({ where: { id } })
+    if (!memberInDb) {
+      return res.json({ message: 'Please register' })
+    } else {
+      return res.status(200).json({ member: memberInDb })
+    }
   })
   try {
   } catch (err) {
