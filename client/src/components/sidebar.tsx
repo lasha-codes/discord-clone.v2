@@ -4,6 +4,7 @@ import { FaDiscord } from 'react-icons/fa6'
 import { LuPlus } from 'react-icons/lu'
 import { toggle_direct_messages } from '../library/slices/navigation'
 import { useDispatch, useSelector } from 'react-redux'
+import discord_word from '../assets/discord_word.png'
 
 const SideBar = () => {
   const dispatch = useDispatch()
@@ -11,10 +12,8 @@ const SideBar = () => {
   return (
     <div className='flex w-[84px] items-center py-1.5 flex-col gap-2 min-h-screen bg-sidebar_color'>
       <div className='flex flex-col gap-2 items-center'>
-        <div className='flex flex-col items-start'>
-          <h4 className='title_icon font-extrabold text-[13px] text-[#bcbec0] mb-2'>
-            Discord
-          </h4>
+        <div className='flex flex-col items-center'>
+          <img src={discord_word} className='w-[55px] object-contain' />
           <div
             onClick={() => dispatch(toggle_direct_messages({ bool: true }))}
             className={`side_icon hover:bg-discord_color cursor-pointer duration-300 ease-in-out bg-bg_color flex items-center justify-center ${

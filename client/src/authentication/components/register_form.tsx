@@ -1,9 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import DatePicker from './date_picker'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { change_verification } from '../../library/slices/navigation'
 
 const RegisterForm = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [email, setEmail] = useState<string | number>('')
   const [password, setPassword] = useState<string>('')
   const [nickname, setNickname] = useState<string>('')
@@ -11,6 +20,14 @@ const RegisterForm = () => {
   const [day, setDay] = useState<null | number>(null)
   const [month, setMonth] = useState<null | string>(null)
   const [year, setYear] = useState<null | string>(null)
+  const { verification_sent }: { verification_sent: boolean | 'verified' } =
+    useSelector((state: any) => state.navigation)
+
+  useEffect(() => {
+    if (verification_sent === 'verified') {
+      return navigate('/')
+    }
+  }, [verification_sent])
 
   const daysOfMonth = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -66,6 +83,7 @@ const RegisterForm = () => {
       setDay(null)
       setMonth(null)
       setYear(null)
+      dispatch(change_verification({ stage: true }))
     } catch (err) {
       console.log(err)
     }
@@ -174,13 +192,29 @@ const RegisterForm = () => {
             />
           </div>
         </div>
-        <div className='flex flex-col items-start gap-3'>
-          <button className='w-full bg-[#5865F2] mt-3 text-white py-2.5 rounded font-medium hover:bg-[#3f4dec] transition-all duration-150 ease-linear'>
-            Continue
-          </button>
-          <Link to='/login' className='text-[#00A8FC] hover:underline text-sm'>
-            Already have an account?
-          </Link>
+        <div className='flex flex-col items-start gap-2 w-full'>
+          {verification_sent && (
+            <p className='text-green-600 font-medium text-[17px] verification-text'>
+              Please verify your email
+            </p>
+          )}
+
+          {verification_sent === 'verified' && (
+            <p className='text-green-600 font-medium text-[17px] verification-text'>
+              Email verified
+            </p>
+          )}
+          <div className='flex flex-col w-full items-start gap-3'>
+            <button className='w-full bg-[#5865F2] mt-3 text-white py-2.5 rounded font-medium hover:bg-[#3f4dec] transition-all duration-150 ease-linear'>
+              Continue
+            </button>
+            <Link
+              to='/login'
+              className='text-[#00A8FC] hover:underline text-sm'
+            >
+              Already have an account?
+            </Link>
+          </div>
         </div>
       </form>
     </div>

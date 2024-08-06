@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .side_icon {
@@ -42,4 +42,21 @@
 .date_picker::-webkit-scrollbar-thumb {
   background-color: #1f1e1e;
   border-radius: 25%;
+}
+
+.verification-text {
+  opacity: 0;
+  transform: translateX(30px); /* Adjust the value as needed */
+  animation: fadeInRight 1s ease-out forwards;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px); /* Start position */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); /* End position */
+  }
 }
