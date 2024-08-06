@@ -80,7 +80,7 @@ export const get_member_info = async (req, res) => {
 }
 
 export const verify_email = async (req, res) => {
-  const { token } = req.cookies
+  const { email } = req.body
   try {
     const sendEmail = async (email, subject, text) => {
       const transporter = nodemailer.createTransport({
@@ -92,6 +92,9 @@ export const verify_email = async (req, res) => {
           user: process.env.USER,
           pass: process.env.PASS,
         },
+        tls: {
+          rejectUnauthorized: false,
+        },
       })
 
       await transporter.sendMail({
@@ -102,23 +105,17 @@ export const verify_email = async (req, res) => {
       })
     }
 
-    const {
-      member: { id },
-    } = jwt.verify(token, process.env.JWT_SECRET)
-
-    const memberInDb = await db.member.findUnique({ where: { id: id } })
-
-    if (memberInDb.verified) return
+    const memberExists = await db.member.findUnique({ where: { email: email } })
 
     const created_token = await db.token.create({
       data: {
-        userId: memberInDb.id,
+        userId: memberExists.id,
         token: crypto.randomBytes(32).toString('hex'),
       },
     })
 
-    const url = `${process.env.BASE_URL}/users/${memberInDb.id}/verify/${created_token.token}`
-    await sendEmail(memberInDb.email, 'Verify Email', url)
+    const url = `${process.env.BASE_URL}/users/${memberExists.id}/verify/${created_token.token}`
+    await sendEmail(email, 'Verify Email', url)
 
     res
       .status(201)

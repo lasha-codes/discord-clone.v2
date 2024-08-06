@@ -58,7 +58,7 @@ const RegisterForm = () => {
         birth_date: `${day} - ${month} - ${year}`,
         nickname,
       })
-      await axios.post('/auth/verify_email')
+      await axios.post('/auth/verify_email', { email })
       setEmail('')
       setPassword('')
       setNickname('')
