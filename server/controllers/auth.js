@@ -108,6 +108,8 @@ export const verify_email = async (req, res) => {
 
     const memberInDb = await db.member.findUnique({ where: { id: id } })
 
+    if (memberInDb.verified) return
+
     const created_token = await db.token.create({
       data: {
         userId: memberInDb.id,
@@ -127,5 +129,30 @@ export const verify_email = async (req, res) => {
     console.log('Email not sent')
     console.log(err)
     res.status(500).json({ message: err.message })
+  }
+}
+
+export const verify_member = async (req, res) => {
+  try {
+    const user = await db.member.findUnique({ where: { id: req.params.id } })
+    if (!user) {
+      return res.status(400).json({ message: 'invalid link' })
+    }
+
+    const token = await db.token.findUnique({
+      where: {
+        userId: user.id,
+        token: req.params.token,
+      },
+    })
+    if (!token) return res.status(400).json({ message: 'invalid link' })
+
+    await db.member.update({ where: { id: user.id }, data: { verified: true } })
+    await db.token.delete({ where: { id: token.id } })
+
+    res.status(200).json({ message: 'Email verified successfully' })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+    console.log(err.message)
   }
 }

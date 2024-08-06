@@ -2,10 +2,8 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import DatePicker from './date_picker'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 
 const RegisterForm = () => {
-  const navigate = useNavigate()
   const [email, setEmail] = useState<string | number>('')
   const [password, setPassword] = useState<string>('')
   const [nickname, setNickname] = useState<string>('')
@@ -60,6 +58,7 @@ const RegisterForm = () => {
         birth_date: `${day} - ${month} - ${year}`,
         nickname,
       })
+      await axios.post('/auth/verify_email')
       setEmail('')
       setPassword('')
       setNickname('')
@@ -67,7 +66,6 @@ const RegisterForm = () => {
       setDay(null)
       setMonth(null)
       setYear(null)
-      navigate('/')
     } catch (err) {
       console.log(err)
     }
