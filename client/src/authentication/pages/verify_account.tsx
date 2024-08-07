@@ -3,13 +3,30 @@ import discord_logo from '../assets/discord_logo.svg'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import verified from '../assets/verified.png'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const VerifyAccount = () => {
+  const navigate = useNavigate()
   const [loaded, setLoaded] = useState<boolean>(false)
+  const [notAllowed, setNotAllowed] = useState<boolean>(false)
 
   useEffect(() => {
     setLoaded(true)
+
+    const verifyToken = async () => {
+      const response = await axios.get('/auth/get_token')
+      if (!response.data.token) {
+        setNotAllowed(true)
+        navigate('/')
+      }
+    }
+    verifyToken()
   }, [loaded])
+
+  if (notAllowed) {
+    return '404 Not Found'
+  }
 
   return (
     <main className='h-[100vh] relative flex items-center justify-center'>

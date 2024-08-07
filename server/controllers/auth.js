@@ -114,12 +114,22 @@ export const verify_email = async (req, res) => {
 
     const memberExists = await db.member.findUnique({ where: { email: email } })
 
-    const created_token = await db.token.create({
-      data: {
-        userId: memberExists.id,
-        token: crypto.randomBytes(32).toString('hex'),
-      },
+    const token_exists = await db.token.findFirst({
+      where: { userId: memberExists.id },
     })
+
+    let created_token
+
+    if (token_exists) {
+      created_token = token_exists
+    } else {
+      created_token = await db.token.create({
+        data: {
+          userId: memberExists.id,
+          token: crypto.randomBytes(32).toString('hex'),
+        },
+      })
+    }
 
     const url = `${process.env.BASE_URL}/users/${memberExists.id}/verify/${created_token.token}`
     await sendEmail(email, 'Verify Email', url)
@@ -163,10 +173,11 @@ export const verify_member = async (req, res) => {
 
 export const get_token = async (req, res) => {
   const { token } = req.cookies
-  if (token) {
-    return res.status(401).json({ message: 'Unauthorized request' })
-  }
+  console.log(process.env.JWT_SECRET)
   try {
+    if (!token) {
+      return res.status(200).json({ message: 'Unauthorized request' })
+    }
     const {
       member: { id },
     } = jwt.verify(token, process.env.JWT_SECRET)
@@ -181,6 +192,6 @@ export const get_token = async (req, res) => {
       return res.status(200).json({ token: members_email_token })
     }
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err })
   }
 }
