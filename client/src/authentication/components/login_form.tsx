@@ -1,9 +1,50 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { load_user_profile } from '../../library/slices/user'
+import { useDispatch } from 'react-redux'
 
 const LoginForm = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [email_phone, setEmail_Phone] = useState<string | number>('')
   const [password, setPassword] = useState<string>('')
+
+  const loginUser = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      if (!email_phone) {
+        toast.warning(
+          'Please provider an email or phone number for ur account.'
+        )
+      }
+      if (!password) {
+        toast.warning('Please provider a password for your account')
+      }
+      if (!password || !email_phone) return
+
+      const response = await axios.post('/auth/login', {
+        email: email_phone,
+        password,
+      })
+
+      if (response.data.message) {
+        return toast.error(response.data.message)
+      }
+
+      setEmail_Phone('')
+      setPassword('')
+      dispatch(load_user_profile() as any)
+
+      if (response.data.member) {
+        return navigate('/')
+      }
+    } catch (err: any) {
+      toast.error(err.message)
+    }
+  }
 
   return (
     <div className='bg-[#313338] rounded-md px-8 py-10 z-[50] absolute w-[500px] top-1/4 flex left-1/2 translate-x-[-50%] flex-col items-center gap-4'>
@@ -11,7 +52,7 @@ const LoginForm = () => {
         <h3 className='font-medium text-2xl text-white'>Welcome back!</h3>
         <p className='text-[#969BA1]'>We're so excited to see you again!</p>
       </div>
-      <form className='w-full flex flex-col gap-4'>
+      <form onSubmit={loginUser} className='w-full flex flex-col gap-4'>
         <div className='flex flex-col items-start gap-1.5 w-full'>
           <label
             htmlFor='email_phone'

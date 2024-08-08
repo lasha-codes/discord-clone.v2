@@ -35,10 +35,12 @@ export const register_account = async (req, res) => {
 export const login = async (req, res) => {
   const { password, email } = req.body
   try {
-    const target_member = await db.member.findUnique({ where: { email } })
+    const target_member = await db.member.findUnique({
+      where: { email },
+    })
     if (!target_member) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: 'user with this email does not exist.' })
     }
     const password_check = await bcrypt.compare(
@@ -54,6 +56,8 @@ export const login = async (req, res) => {
           res.cookie('token', token).json({ member: target_member })
         }
       )
+    } else {
+      res.json({ message: 'Provided password is incorrect.' })
     }
   } catch (err) {
     res.status(500).json({ message: err.message })
