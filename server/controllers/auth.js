@@ -8,7 +8,6 @@ export const register_account = async (req, res) => {
   const { username, email, password, nickname, birth_date } = req.body
   const user_exists = await db.member.findUnique({ where: { email } })
   if (user_exists) {
-    // TODO: custom discord error
     return res
       .status(403)
       .json({ message: 'User with this email already exists' })
@@ -173,7 +172,7 @@ export const verify_member = async (req, res) => {
 
 export const get_token = async (req, res) => {
   const { token } = req.cookies
-  console.log(process.env.JWT_SECRET)
+
   try {
     if (!token) {
       return res.status(200).json({ message: 'Unauthorized request' })

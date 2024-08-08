@@ -10,7 +10,7 @@ type initialState = {
 
 const initial_state: initialState = {
   account: null,
-  loading: false,
+  loading: true,
 }
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {

@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom'
 import verified from '../assets/verified.png'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 const VerifyAccount = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [loaded, setLoaded] = useState<boolean>(false)
   const [notAllowed, setNotAllowed] = useState<boolean>(false)
@@ -18,11 +20,11 @@ const VerifyAccount = () => {
       const response = await axios.get('/auth/get_token')
       if (!response.data.token) {
         setNotAllowed(true)
-        navigate('/')
+        return navigate('/')
       }
     }
     verifyToken()
-  }, [loaded])
+  }, [loaded, dispatch, navigate])
 
   if (notAllowed) {
     return '404 Not Found'

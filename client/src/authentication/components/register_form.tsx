@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { change_verification } from '../../library/slices/navigation'
+import { load_user_profile } from '../../library/slices/user'
 
 const RegisterForm = () => {
   const dispatch = useDispatch()
@@ -84,6 +85,7 @@ const RegisterForm = () => {
       setMonth(null)
       setYear(null)
       dispatch(change_verification({ stage: true }))
+      dispatch(load_user_profile() as any)
     } catch (err) {
       console.log(err)
     }
