@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import verified from '../assets/verified.png'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { change_verification } from '../../library/slices/navigation'
 
 const VerifyAccount = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const params = useParams()
   const [loaded, setLoaded] = useState<boolean>(false)
   const [notAllowed, setNotAllowed] = useState<boolean>(false)
 
@@ -21,6 +23,8 @@ const VerifyAccount = () => {
       if (!response.data.token) {
         setNotAllowed(true)
         return navigate('/')
+      } else {
+        dispatch(change_verification({ stage: 'verified' }))
       }
     }
     verifyToken()

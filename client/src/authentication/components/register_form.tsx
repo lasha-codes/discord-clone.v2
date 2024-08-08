@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { change_verification } from '../../library/slices/navigation'
 import { load_user_profile } from '../../library/slices/user'
+import { toast } from 'sonner'
 
 const RegisterForm = () => {
   const dispatch = useDispatch()
@@ -69,6 +70,38 @@ const RegisterForm = () => {
   const registerUser = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      if (!email) {
+        toast.warning('Please fill out ur email.')
+      }
+      if (!username) {
+        toast.warning('Please fill out ur username.')
+      }
+      if (!nickname) {
+        toast.warning('Please fill out ur display name.')
+      }
+      if (!password) {
+        toast.warning('Please fill out ur password.')
+      }
+      if (!month) {
+        toast.warning('Please select the month u were born.')
+      }
+      if (!day) {
+        toast.warning('Please select the day u were born.')
+      }
+      if (!year) {
+        toast.warning('Please select the year u were born.')
+      }
+      if (
+        !year ||
+        !day ||
+        !month ||
+        !password ||
+        !username ||
+        !nickname ||
+        !email
+      ) {
+        return
+      }
       await axios.post('/auth/register', {
         username,
         email,

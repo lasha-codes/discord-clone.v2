@@ -37,7 +37,11 @@ const navigationSlice = createSlice({
     },
     change_verification: (state, { payload }) => {
       const { stage }: { stage: boolean | 'verified' } = payload
-      state.verification_sent = stage
+      if (stage === 'verified') {
+        state.verification_sent = 'verified'
+      } else {
+        state.verification_sent = stage
+      }
     },
   },
 })
