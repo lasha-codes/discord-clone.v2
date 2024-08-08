@@ -15,10 +15,8 @@ const initial_state: initialState = {
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {
   try {
-    const {
-      data: { member },
-    } = await axios.get('auth/get_member')
-    return member
+    const response = await axios.get('/auth/get_member')
+    return response.data.member
   } catch (err: any) {
     console.log(err.message)
   }
@@ -38,8 +36,7 @@ const user_slice = createSlice({
     })
     builder.addCase(load_user_profile.fulfilled, (state, payload) => {
       state.loading = false
-      state.account = payload
-      console.log(state.account)
+      state.account = payload.payload
     })
   },
 })

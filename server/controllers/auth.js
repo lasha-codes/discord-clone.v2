@@ -67,7 +67,7 @@ export const login = async (req, res) => {
 export const get_member_info = async (req, res) => {
   const { token } = req.cookies
   if (!token) {
-    return
+    return res.json({ member: null })
   }
   jwt.verify(token, process.env.JWT_SECRET, async (err, tokenData) => {
     const {
@@ -77,8 +77,8 @@ export const get_member_info = async (req, res) => {
       return res.status(500).json({ error: err })
     }
     const memberInDb = await db.member.findUnique({ where: { id } })
-    if (!memberInDb?.username) {
-      return res.json({ member: null })
+    if (!memberInDb) {
+      return res.status(200).json({ member: null })
     } else {
       return res.status(200).json({ member: memberInDb })
     }
@@ -116,14 +116,17 @@ export const verify_email = async (req, res) => {
       })
     }
 
-    const memberExists =
-      email && (await db.member.findUnique({ where: { email: email } }))
+    const {
+      member: { email: user_email },
+    } = jwt.verify(token, process.env.JWT_SECRET)
 
-    const token_exists =
-      email &&
-      (await db.token.findFirst({
-        where: { userId: memberExists.id },
-      }))
+    const memberExists = email
+      ? await db.member.findUnique({ where: { email: email } })
+      : await db.member.findUnique({ where: { email: user_email } })
+
+    const token_exists = await db.token.findFirst({
+      where: { userId: memberExists.id },
+    })
 
     let created_token
 
@@ -145,7 +148,7 @@ export const verify_email = async (req, res) => {
       } = jwt.verify(token, process.env.JWT_SECRET)
       const target_member = await db.member.findUnique({ where: { email } })
 
-      const new_url = `${process.env.BASE_URL}/users/${target_member}/verify/${created_token.token}`
+      const new_url = `${process.env.BASE_URL}/users/${target_member.id}/verify/${created_token.token}`
 
       if (target_member) {
         await sendEmail(target_member.email, 'Verify Email', new_url)

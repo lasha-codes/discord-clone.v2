@@ -9,7 +9,7 @@ const SendVerification = () => {
   const { verification_sent } = useSelector((state: any) => state.navigation)
   const send_verification = async () => {
     try {
-      await axios.post('/verify_email', { auto_mail: true })
+      await axios.post('/auth/verify_email', { auto_mail: true })
       dispatch(change_verification({ stage: true }))
     } catch (err: any) {
       toast.error(err.message)
@@ -21,7 +21,7 @@ const SendVerification = () => {
       <p className='text-white'>Account u have registered is not verified</p>
       <button
         onClick={send_verification}
-        className='w-full bg-[#5865F2] mt-3 text-white py-2.5 rounded font-medium hover:bg-[#3f4dec] transition-all duration-150 ease-linear'
+        className='w-full bg-[#5865F2] mb-5 mt-3 text-white py-2.5 rounded font-medium hover:bg-[#3f4dec] transition-all duration-150 ease-linear'
       >
         Verify account
       </button>

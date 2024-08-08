@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom'
 import verified from '../assets/verified.png'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { load_user_profile } from '../../library/slices/user'
 
 const VerifyAccount = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const params = useParams()
   const [loaded, setLoaded] = useState<boolean>(false)
   const [notAllowed, setNotAllowed] = useState<boolean>(false)
@@ -22,6 +25,7 @@ const VerifyAccount = () => {
         return navigate('/')
       } else {
         await axios.get(`/auth/${params.userId}/verify/${params.token}`)
+        dispatch(load_user_profile() as any)
       }
     }
     verifyToken()
