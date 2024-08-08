@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client'
 
 let prisma = new PrismaClient()
 
-await prisma.member.deleteMany()
-await prisma.token.deleteMany()
+// await prisma.member.deleteMany()
+// await prisma.token.deleteMany()
 
 const members = await prisma.member.findMany()
 const tokens = await prisma.token.findMany()
