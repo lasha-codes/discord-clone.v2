@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { load_user_profile } from './library/slices/user'
 import VerifyAccount from './authentication/pages/verify_account'
+import SentVerification from './authentication/pages/sent_verification'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const App = () => {
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<RegisterPage />} />
       <Route path='/users/:userId/verify/:token' element={<VerifyAccount />} />
+      <Route path='/send_email_verification' element={<SentVerification />} />
     </Routes>
   )
 }
