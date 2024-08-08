@@ -6,7 +6,8 @@ let prisma = new PrismaClient()
 // await prisma.token.deleteMany()
 
 const members = await prisma.member.findMany()
-console.log(members)
+const tokens = await prisma.token.findMany()
+console.log(members, tokens)
 
 if (!global.prisma) {
   global.prisma = new PrismaClient()

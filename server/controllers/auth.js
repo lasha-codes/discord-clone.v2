@@ -77,8 +77,8 @@ export const get_member_info = async (req, res) => {
       return res.status(500).json({ error: err })
     }
     const memberInDb = await db.member.findUnique({ where: { id } })
-    if (!memberInDb) {
-      return res.json({ message: 'Please register' })
+    if (!memberInDb?.username) {
+      return res.json({ member: null })
     } else {
       return res.status(200).json({ member: memberInDb })
     }
@@ -90,7 +90,8 @@ export const get_member_info = async (req, res) => {
 }
 
 export const verify_email = async (req, res) => {
-  const { email } = req.body
+  const { email, auto_mail } = req.body
+  const { token } = req.cookies
   try {
     const sendEmail = async (email, subject, text) => {
       const transporter = nodemailer.createTransport({
@@ -115,11 +116,14 @@ export const verify_email = async (req, res) => {
       })
     }
 
-    const memberExists = await db.member.findUnique({ where: { email: email } })
+    const memberExists =
+      email && (await db.member.findUnique({ where: { email: email } }))
 
-    const token_exists = await db.token.findFirst({
-      where: { userId: memberExists.id },
-    })
+    const token_exists =
+      email &&
+      (await db.token.findFirst({
+        where: { userId: memberExists.id },
+      }))
 
     let created_token
 
@@ -135,7 +139,25 @@ export const verify_email = async (req, res) => {
     }
 
     const url = `${process.env.BASE_URL}/users/${memberExists.id}/verify/${created_token.token}`
-    await sendEmail(email, 'Verify Email', url)
+    if (auto_mail && !email) {
+      const {
+        member: { email },
+      } = jwt.verify(token, process.env.JWT_SECRET)
+      const target_member = await db.member.findUnique({ where: { email } })
+
+      const new_url = `${process.env.BASE_URL}/users/${target_member}/verify/${created_token.token}`
+
+      if (target_member) {
+        await sendEmail(target_member.email, 'Verify Email', new_url)
+      } else {
+        res.json({
+          message:
+            'User with the registered email does not exist in our database.',
+        })
+      }
+    } else {
+      await sendEmail(email, 'Verify Email', url)
+    }
 
     res
       .status(201)
