@@ -27,7 +27,7 @@ const App = () => {
     if (!loading && account) {
       socket.emit('get_user_data', { userId: account.id })
     }
-  }, [loading, account])
+  }, [loading, account, socket])
 
   return (
     <Routes>

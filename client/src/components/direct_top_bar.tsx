@@ -38,7 +38,7 @@ const DirectTopBar = () => {
           onClick={() => dispatch(select_direct_nav({ nav: 'add_friend' }))}
           className={`font-medium px-2 text-sm transition-all duration-100 ease-out py-[3px] cursor-pointer rounded-md text-white bg-[#15b854c0] ${
             selected_direct_nav === 'add_friend' &&
-            '!bg-transparent border border-[#15b854c0] text-[#15b854c0]'
+            '!bg-transparent border !border-[#15b854c0] !text-[#15b854c0]'
           }`}
         >
           Add friend

@@ -14,7 +14,7 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(cookieParser())
 app.use('/auth', auth)
 
-const connected_members = []
+let connected_members = []
 
 const server = http.createServer(app)
 const io = new Server(server, { cors: { origin: 'http://localhost:5173' } })
@@ -23,11 +23,21 @@ io.on('connection', (socket) => {
   socket.on('get_user_data', (data) => {
     const { userId } = data
     const userExists = connected_members.find((member) => {
-      return member === userId
+      return member.socketId === socket.id
     })
     if (!userExists) {
-      connected_members.push(userId)
+      connected_members = connected_members.filter((member) => {
+        return member.userId !== userId
+      })
+      connected_members.push({ userId, socketId: socket.id })
     }
+    console.log(connected_members)
+  })
+
+  socket.on('disconnect', () => {
+    connected_members = connected_members.filter((member) => {
+      return member.socketId !== socket.id
+    })
     console.log(connected_members)
   })
 })

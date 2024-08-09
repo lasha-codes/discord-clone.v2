@@ -5,7 +5,7 @@ type initial_type = {
   direct_messages_open: boolean
   date_picker: 'month' | 'day' | 'year' | null
   verification_sent: boolean | 'verified'
-  selected_direct_nav: string | null
+  selected_direct_nav: string
 }
 
 const initial_state: initial_type = {
@@ -13,7 +13,7 @@ const initial_state: initial_type = {
   direct_messages_open: false,
   date_picker: null,
   verification_sent: false,
-  selected_direct_nav: null,
+  selected_direct_nav: 'Online',
 }
 
 const navigationSlice = createSlice({

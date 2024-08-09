@@ -39,7 +39,19 @@ model Server {
 
 model Token {
   id        String   @id @default(uuid())
-  userId    String @unique
+  userId    String   @unique
   token     String
   createdAt DateTime @default(now())
+}
+
+model Requests {
+  id       String @id @default(uuid())
+  sender   String
+  reciever String
+}
+
+model Friends {
+  id          String @id @default(uuid())
+  first_user  String
+  second_user String
 }
