@@ -223,3 +223,62 @@ export const get_token = async (req, res) => {
     res.status(500).json({ message: err })
   }
 }
+
+export const send_friend_request = async (req, res) => {
+  const { receiver_username, sender_id } = req.body
+  try {
+    const receiver = await db.member.findUnique({
+      where: { username: receiver_username },
+    })
+    if (!receiver) {
+      return res.status(200).json({
+        error_message:
+          "Hm, that didn't work. Double-check that the username is correct.",
+      })
+    }
+
+    const already_sent = await db.requests.findFirst({
+      where: { sender: sender_id, receiver: receiver.id },
+    })
+
+    if (already_sent) {
+      return res.status(200).json({
+        error_message: "You've already have sent friend request to that user.",
+      })
+    }
+
+    const receiver_sent = await db.requests.findFirst({
+      where: { sender: receiver.id, receiver: sender_id },
+    })
+
+    if (receiver_sent) {
+      const new_friends = await db.friends.create({
+        data: {
+          first_user: receiver.id,
+          second_user: sender_id,
+        },
+      })
+
+      await db.requests.delete({ where: { id: receiver_sent.id } })
+
+      return res.status(200).json({
+        message:
+          'This user has already sent u a friend request u are now friends :).',
+        new_friends,
+      })
+    }
+    const created_request = await db.requests.create({
+      data: {
+        sender: sender_id,
+        receiver: receiver.id,
+      },
+    })
+
+    return res.status(200).json({
+      message: 'Friend request to this user has been sent!',
+      created_request,
+    })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}

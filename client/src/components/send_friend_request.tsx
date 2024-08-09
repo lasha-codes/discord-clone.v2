@@ -15,6 +15,10 @@ const SendFriendRequest = () => {
           <div className='w-full h-[48px] rounded-lg relative overflow-y-hidden mt-2'>
             <input
               type='text'
+              value={username}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUsername(e.target.value)
+              }
               placeholder='You can add friends with their Discord usernames.'
               className='w-full h-full text-[17px] text-white px-4 placeholder:text-[15px] placeholder:text-gray-500/90 placeholder:font-medium bg-[#13131393] border border-black rounded-lg outline-none'
             />

@@ -47,7 +47,7 @@ model Token {
 model Requests {
   id       String @id @default(uuid())
   sender   String
-  reciever String
+  receiver String
 }
 
 model Friends {
