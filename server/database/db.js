@@ -7,7 +7,6 @@ let prisma = new PrismaClient()
 
 const members = await prisma.member.findMany()
 const tokens = await prisma.token.findMany()
-console.log(members, tokens)
 
 if (!global.prisma) {
   global.prisma = new PrismaClient()
