@@ -12,12 +12,12 @@ import SentVerification from './authentication/pages/sent_verification'
 import io from 'socket.io-client'
 import { useSelector } from 'react-redux'
 
+const ENDPOINT = 'http://localhost:4000'
+export const socket = io(ENDPOINT)
+
 const App = () => {
   const dispatch = useDispatch()
   const { account, loading } = useSelector((state: any) => state.user)
-  const ENDPOINT = 'http://localhost:4000'
-
-  const socket = io(ENDPOINT)
 
   useEffect(() => {
     dispatch(load_user_profile() as any)
