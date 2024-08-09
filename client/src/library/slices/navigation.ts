@@ -5,6 +5,7 @@ type initial_type = {
   direct_messages_open: boolean
   date_picker: 'month' | 'day' | 'year' | null
   verification_sent: boolean | 'verified'
+  selected_direct_nav: string | null
 }
 
 const initial_state: initial_type = {
@@ -12,6 +13,7 @@ const initial_state: initial_type = {
   direct_messages_open: false,
   date_picker: null,
   verification_sent: false,
+  selected_direct_nav: null,
 }
 
 const navigationSlice = createSlice({
@@ -43,6 +45,9 @@ const navigationSlice = createSlice({
         state.verification_sent = stage
       }
     },
+    select_direct_nav: (state, { payload }) => {
+      state.selected_direct_nav = payload.nav
+    },
   },
 })
 
@@ -53,4 +58,5 @@ export const {
   select_date_picker,
   close_date_picker,
   change_verification,
+  select_direct_nav,
 } = navigationSlice.actions

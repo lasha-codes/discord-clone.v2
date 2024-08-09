@@ -7,7 +7,7 @@ const DirectSideBar = () => {
     <div className='bg-second_bar_color h-full w-[230px] flex flex-col pt-16'>
       <div className='flex flex-col gap-5 w-full'>
         <div className='px-2'>
-          <div className='w-full flex items-center justify-start gap-2.5 text-xl text-[#cacccc] hover:bg-[#fff]/10 hover:text-white py-1.5 rounded-md px-5 transition-all duration-200 cursor-pointer ease-in-out'>
+          <div className='w-full flex items-center justify-start gap-2.5 text-xl text-[#cacccc] hover:bg-gray-300/5 hover:text-white py-1.5 rounded-md px-5 transition-all duration-200 cursor-pointer ease-in-out'>
             <img
               src={friends_icon}
               className='w-[35px] h-[35px] object-contain'
