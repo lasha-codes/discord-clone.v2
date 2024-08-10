@@ -17,7 +17,7 @@ const SendFriendRequest = () => {
         data: { message, error_message },
       } = await axios.post('/auth/send_friend_request', {
         receiver_username: username,
-        sender_id: account.id,
+        sender_member: account,
       })
       if (error_message) {
         setErrMessage(error_message)

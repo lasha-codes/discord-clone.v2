@@ -45,13 +45,17 @@ model Token {
 }
 
 model Requests {
-  id       String @id @default(uuid())
-  sender   String
-  receiver String
+  id          String @id @default(uuid())
+  sender_id   String
+  receiver_id String
+  sender      Json
+  receiver    Json
 }
 
 model Friends {
-  id          String @id @default(uuid())
-  first_user  String
-  second_user String
+  id             String @id @default(uuid())
+  first_user_id  String
+  second_user_id String
+  first_user     Json
+  second_user    Json
 }

@@ -225,7 +225,8 @@ export const get_token = async (req, res) => {
 }
 
 export const send_friend_request = async (req, res) => {
-  const { receiver_username, sender_id } = req.body
+  const { receiver_username, sender_member } = req.body
+
   try {
     const receiver = await db.member.findUnique({
       where: { username: receiver_username },
@@ -237,8 +238,29 @@ export const send_friend_request = async (req, res) => {
       })
     }
 
+    if (receiver.id === sender_member.id) {
+      return res.status(200).json({
+        error_message:
+          'You really are that alone? Wumpus will be your friend :).',
+      })
+    }
+
+    const alreadyFriends_first = await db.friends.findFirst({
+      where: { first_user_id: sender_member.id },
+    })
+
+    const alreadyFriends_second = await db.friends.findFirst({
+      where: { second_user_id: sender_member.id },
+    })
+
+    if (alreadyFriends_first || alreadyFriends_second) {
+      return res
+        .status(200)
+        .json({ error_message: "You're already friends with this user." })
+    }
+
     const already_sent = await db.requests.findFirst({
-      where: { sender: sender_id, receiver: receiver.id },
+      where: { sender_id: sender_member.id, receiver_id: receiver.id },
     })
 
     if (already_sent) {
@@ -248,14 +270,16 @@ export const send_friend_request = async (req, res) => {
     }
 
     const receiver_sent = await db.requests.findFirst({
-      where: { sender: receiver.id, receiver: sender_id },
+      where: { sender_id: receiver.id, receiver_id: sender_member.id },
     })
 
     if (receiver_sent) {
       const new_friends = await db.friends.create({
         data: {
-          first_user: receiver.id,
-          second_user: sender_id,
+          first_user_id: sender_member.id,
+          second_user_id: receiver.id,
+          first_user: sender_member,
+          second_user: receiver,
         },
       })
 
@@ -269,8 +293,10 @@ export const send_friend_request = async (req, res) => {
     }
     const created_request = await db.requests.create({
       data: {
-        sender: sender_id,
-        receiver: receiver.id,
+        sender_id: sender_member.id,
+        receiver_id: receiver.id,
+        sender: sender_member,
+        receiver: receiver,
       },
     })
 
@@ -292,10 +318,11 @@ export const get_pending_requests = async (req, res) => {
     const {
       member: { id },
     } = jwt.verify(token, process.env.JWT_SECRET)
-    console.log(id)
-    const sendRequests = await db.requests.findMany({ where: { sender: id } })
+    const sendRequests = await db.requests.findMany({
+      where: { sender_id: id },
+    })
     const receivedRequests = await db.requests.findMany({
-      where: { receiver: id },
+      where: { receiver_id: id },
     })
 
     res.status(200).json({ sent: sendRequests, received: receivedRequests })

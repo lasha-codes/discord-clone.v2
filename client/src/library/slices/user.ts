@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-type request = {
+export type request = {
   id: string
   sender: string
   receiver: string
