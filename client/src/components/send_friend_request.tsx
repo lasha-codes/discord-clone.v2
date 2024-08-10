@@ -2,7 +2,6 @@ import { useState } from 'react'
 import wampus_no_friends from '../assets/wampus_no_friends.png'
 import axios from 'axios'
 import { toast } from 'sonner'
-import { socket } from '../App'
 import { useSelector } from 'react-redux'
 
 const SendFriendRequest = () => {
@@ -68,7 +67,7 @@ const SendFriendRequest = () => {
           <p
             className='text-[13px] ml-0.5'
             style={{
-              color: message || errMessage,
+              color: requestColor,
             }}
           >
             {message || errMessage}

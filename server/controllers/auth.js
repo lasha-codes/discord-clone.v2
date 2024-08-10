@@ -282,3 +282,23 @@ export const send_friend_request = async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 }
+
+export const get_pending_requests = async (req, res) => {
+  const { token } = req.cookies
+  if (!token) {
+    return res.json({ message: 'Unauthorized request' })
+  }
+  try {
+    const {
+      member: { id },
+    } = jwt.verify(token, process.env.JWT_SECRET)
+    const sendRequests = await db.requests.findMany({ where: { sender: id } })
+    const receivedRequests = await db.requests.findMany({
+      where: { receiver: { id } },
+    })
+
+    res.status(200).json({ send: sendRequests, received: receivedRequests })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}

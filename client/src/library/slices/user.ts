@@ -3,14 +3,22 @@ import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+type request = {
+  id: string
+  sender: string
+  receiver: string
+}
+
 type initialState = {
   account: null | any
+  requests: request[]
   loading: boolean
 }
 
 const initial_state: initialState = {
   account: null,
   loading: true,
+  requests: [],
 }
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {
