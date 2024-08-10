@@ -6,7 +6,10 @@ import LoginPage from './authentication/pages/login'
 import RegisterPage from './authentication/pages/register'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { load_user_profile } from './library/slices/user'
+import {
+  load_user_profile,
+  fetch_pending_requests,
+} from './library/slices/user'
 import VerifyAccount from './authentication/pages/verify_account'
 import SentVerification from './authentication/pages/sent_verification'
 import io from 'socket.io-client'
@@ -21,6 +24,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(load_user_profile() as any)
+    dispatch(fetch_pending_requests() as any)
   }, [])
 
   useEffect(() => {

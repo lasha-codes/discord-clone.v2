@@ -292,12 +292,13 @@ export const get_pending_requests = async (req, res) => {
     const {
       member: { id },
     } = jwt.verify(token, process.env.JWT_SECRET)
+    console.log(id)
     const sendRequests = await db.requests.findMany({ where: { sender: id } })
     const receivedRequests = await db.requests.findMany({
-      where: { receiver: { id } },
+      where: { receiver: id },
     })
 
-    res.status(200).json({ send: sendRequests, received: receivedRequests })
+    res.status(200).json({ sent: sendRequests, received: receivedRequests })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
