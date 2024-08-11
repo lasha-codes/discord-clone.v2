@@ -37,9 +37,9 @@ export const fetch_pending_requests = createAsyncThunk(
   async () => {
     try {
       const {
-        data: { sent, received },
+        data: { requests },
       } = await axios.get('/auth/get_pending_requests')
-      return { sent, received }
+      return requests
     } catch (err: any) {
       console.log(err.message)
     }

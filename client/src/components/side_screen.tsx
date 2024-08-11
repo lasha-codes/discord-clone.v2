@@ -2,6 +2,7 @@ import DirectSideBar from './direct_side_bar'
 import DirectTopBar from './direct_top_bar'
 import { useSelector } from 'react-redux'
 import SendFriendRequest from './send_friend_request'
+import PendingRequests from './pending_requests'
 
 const SideScreen = () => {
   const { selected_direct_nav }: { selected_direct_nav: string } = useSelector(
@@ -13,6 +14,7 @@ const SideScreen = () => {
       <DirectTopBar />
       <div className='mt-[75px] w-full'>
         {selected_direct_nav === 'add_friend' && <SendFriendRequest />}
+        {selected_direct_nav === 'Pending' && <PendingRequests />}
       </div>
     </section>
   )
