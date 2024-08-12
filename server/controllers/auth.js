@@ -326,7 +326,7 @@ export const get_pending_requests = async (req, res) => {
     })
 
     res.status(200).json({
-      requests: [{ send: sendRequests }, { received: receivedRequests }],
+      requests: [{ sent: sendRequests }, { received: receivedRequests }],
     })
   } catch (err) {
     res.status(500).json({ message: err.message })

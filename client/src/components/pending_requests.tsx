@@ -1,50 +1,74 @@
 import { useSelector } from 'react-redux'
 import default_avatar from '../assets/default_avatar.png'
 import { IoClose } from 'react-icons/io5'
-import { FaPlus } from 'react-icons/fa6'
+import { IoCheckmark } from 'react-icons/io5'
 
 const PendingRequests = () => {
   const { requests, requests_loading, account } = useSelector(
     (state: any) => state.user
   )
   return (
-    <section className=''>
+    <section className='px-10'>
       <div className=''>
-        {Array.isArray(requests?.sent) ? (
-          requests.sent.map((pending: any, idx: number) => {
+        {requests[0].sent?.length > 0 &&
+          requests[0].sent.map((pending: any, idx: number) => {
+            const avatar = pending.receiver.image_url || default_avatar
+            return (
+              <div
+                key={idx}
+                className='w-full flex justify-between items-center'
+              >
+                <div className='flex items-center gap-3'>
+                  <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+                    <img src={avatar} />
+                  </div>
+                  <div className='flex flex-col items-start'>
+                    <h4 className='text-gray-100 font-medium'>
+                      {pending.receiver.username}
+                    </h4>
+                    <p className='text-gray-500 text-sm'>
+                      Outgoing Friend Request
+                    </p>
+                  </div>
+                </div>
+                <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'>
+                  <IoClose />
+                </div>
+              </div>
+            )
+          })}
+        {requests[1].received?.length > 0 &&
+          requests[1].received.map((pending: any, idx: number) => {
             const avatar = pending.sender.image_url || default_avatar
             return (
               <div
                 key={idx}
                 className='w-full flex justify-between items-center'
               >
-                <div className='flex items-center gap-1'>
-                  <img src={avatar} />
-                  <div className='flex flex-col items-start gap-0.5'>
-                    <h4>{pending.sender.username}</h4>
-                    <p>Outgoing Friend Request</p>
+                <div className='flex items-center gap-3'>
+                  <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+                    <img src={avatar} />
+                  </div>
+                  <div className='flex flex-col items-start'>
+                    <h4 className='text-gray-100 font-medium'>
+                      {pending.sender.username}
+                    </h4>
+                    <p className='text-gray-500 text-sm'>
+                      Incoming Friend Request
+                    </p>
                   </div>
                 </div>
-                <div className=''>
-                  <IoClose />
+                <div className='flex flex-row-reverse items-center gap-4'>
+                  <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'>
+                    <IoClose />
+                  </div>
+                  <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-green-500'>
+                    <IoCheckmark />
+                  </div>
                 </div>
               </div>
             )
-          })
-        ) : (
-          <div className='w-full flex justify-between items-center'>
-            <div className='flex items-center gap-1'>
-              <img />
-              <div className='flex flex-col items-start gap-0.5'>
-                <h4>{requests.sent.username}</h4>
-                <p>Outgoing Friend Request</p>
-              </div>
-            </div>
-            <div className=''>
-              <IoClose />
-            </div>
-          </div>
-        )}
+          })}
       </div>
     </section>
   )
