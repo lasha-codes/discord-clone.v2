@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import {
   load_user_profile,
   fetch_pending_requests,
+  add_request,
 } from './library/slices/user'
 import VerifyAccount from './authentication/pages/verify_account'
 import SentVerification from './authentication/pages/sent_verification'
@@ -32,6 +33,19 @@ const App = () => {
       socket.emit('get_user_data', { userId: account.id })
     }
   }, [loading, account, socket])
+
+  useEffect(() => {
+    const handlePushRequest = ({ request }: { request: any }) => {
+      dispatch(add_request({ request }))
+      console.log('received')
+    }
+
+    socket.on('push_request', handlePushRequest)
+
+    return () => {
+      socket.off('push_request', handlePushRequest)
+    }
+  }, [socket])
 
   return (
     <Routes>

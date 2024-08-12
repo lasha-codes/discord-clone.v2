@@ -34,6 +34,18 @@ io.on('connection', (socket) => {
     console.log(connected_members)
   })
 
+  socket.on('get_request', ({ receiver_id, request }) => {
+    console.log('request')
+    const connected_user = connected_members.find((user) => {
+      return user.userId === receiver_id
+    })
+    if (connected_user) {
+      socket
+        .to(connected_user.socketId)
+        .emit('push_request', { receiver_id, request })
+    }
+  })
+
   socket.on('disconnect', () => {
     connected_members = connected_members.filter((member) => {
       return member.socketId !== socket.id

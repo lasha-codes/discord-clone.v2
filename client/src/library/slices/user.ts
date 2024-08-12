@@ -3,15 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-export type request = {
-  id: string
-  sender: string
-  receiver: string
-}
-
 type initialState = {
   account: null | any
-  requests: request[]
+  requests: any[]
   loading: boolean
   requests_loading: boolean
 }
@@ -49,7 +43,23 @@ export const fetch_pending_requests = createAsyncThunk(
 const user_slice = createSlice({
   initialState: initial_state,
   name: 'user',
-  reducers: {},
+  reducers: {
+    add_request: (state, { payload }) => {
+      if (state.account.id === payload.request.sender_id) {
+        if (state.requests[0].sent) {
+          state.requests[0].sent.push(payload.request)
+        } else {
+          state.requests[0].sent = payload.request
+        }
+      } else {
+        if (state.requests[1].received) {
+          state.requests[1].received.push(payload.request)
+        } else {
+          state.requests[1].received = payload.request
+        }
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(load_user_profile.pending, (state) => {
       state.loading = true
@@ -82,3 +92,4 @@ const user_slice = createSlice({
 })
 
 export default user_slice.reducer
+export const { add_request } = user_slice.actions

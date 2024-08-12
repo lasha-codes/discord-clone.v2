@@ -3,8 +3,12 @@ import wampus_no_friends from '../assets/wampus_no_friends.png'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useSelector } from 'react-redux'
+import { socket } from '../App'
+import { useDispatch } from 'react-redux'
+import { add_request } from '../library/slices/user'
 
 const SendFriendRequest = () => {
+  const dispatch = useDispatch()
   const { account } = useSelector((state: any) => state.user)
   const [username, setUsername] = useState<string>('')
   const [errMessage, setErrMessage] = useState<string>('')
@@ -14,11 +18,15 @@ const SendFriendRequest = () => {
   const sendFriendRequest = async () => {
     try {
       const {
-        data: { message, error_message },
+        data: { message, error_message, sent, receiver_id },
       } = await axios.post('/auth/send_friend_request', {
         receiver_username: username,
         sender_member: account,
       })
+      if (sent) {
+        socket.emit('get_request', { receiver_id, request: sent })
+        dispatch(add_request({ request: sent }))
+      }
       if (error_message) {
         setErrMessage(error_message)
         setMessage('')

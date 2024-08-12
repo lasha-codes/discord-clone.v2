@@ -302,7 +302,8 @@ export const send_friend_request = async (req, res) => {
 
     return res.status(200).json({
       message: 'Friend request to this user has been sent!',
-      created_request,
+      sent: created_request,
+      receiver_id: receiver.id,
     })
   } catch (err) {
     res.status(500).json({ message: err.message })
