@@ -333,3 +333,15 @@ export const get_pending_requests = async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 }
+
+export const delete_request = async (req, res) => {
+  try {
+    const { request_id } = req.body
+    const deleted_request = await db.requests.delete({
+      where: { id: request_id },
+    })
+    res.status(200).json({ deleted_request })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}

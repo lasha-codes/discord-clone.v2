@@ -2,11 +2,22 @@ import { useSelector } from 'react-redux'
 import default_avatar from '../assets/default_avatar.png'
 import { IoClose } from 'react-icons/io5'
 import { IoCheckmark } from 'react-icons/io5'
+import axios from 'axios'
 
 const PendingRequests = () => {
-  const { requests, requests_loading, account } = useSelector(
-    (state: any) => state.user
-  )
+  const { requests } = useSelector((state: any) => state.user)
+
+  const delete_request = async (request_id: string) => {
+    try {
+      const {
+        data: { deleted_request },
+      } = await axios.post('/auth/delete_request', { request_id })
+      console.log(deleted_request)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <section className='px-10'>
       <div className=''>
@@ -31,7 +42,10 @@ const PendingRequests = () => {
                     </p>
                   </div>
                 </div>
-                <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'>
+                <div
+                  onClick={() => delete_request(pending.id)}
+                  className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'
+                >
                   <IoClose />
                 </div>
               </div>
@@ -59,7 +73,10 @@ const PendingRequests = () => {
                   </div>
                 </div>
                 <div className='flex flex-row-reverse items-center gap-4'>
-                  <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'>
+                  <div
+                    onClick={() => delete_request(pending.id)}
+                    className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'
+                  >
                     <IoClose />
                   </div>
                   <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-green-500'>
