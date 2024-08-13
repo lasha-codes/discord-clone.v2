@@ -3,16 +3,20 @@ import default_avatar from '../assets/default_avatar.png'
 import { IoClose } from 'react-icons/io5'
 import { IoCheckmark } from 'react-icons/io5'
 import axios from 'axios'
+import { socket } from '../App'
 
 const PendingRequests = () => {
-  const { requests } = useSelector((state: any) => state.user)
+  const { requests, account } = useSelector((state: any) => state.user)
 
   const delete_request = async (request_id: string) => {
     try {
       const {
         data: { deleted_request },
       } = await axios.post('/auth/delete_request', { request_id })
-      console.log(deleted_request)
+      socket.emit('delete_request', {
+        deleted_request: deleted_request,
+        member_id: account.id,
+      })
     } catch (err) {
       console.log(err)
     }
@@ -21,7 +25,8 @@ const PendingRequests = () => {
   return (
     <section className='px-10'>
       <div className=''>
-        {requests[0].sent?.length > 0 &&
+        {requests?.[0].sent &&
+          requests[0].sent?.length > 0 &&
           requests[0].sent.map((pending: any, idx: number) => {
             const avatar = pending.receiver.image_url || default_avatar
             return (
@@ -51,7 +56,8 @@ const PendingRequests = () => {
               </div>
             )
           })}
-        {requests[1].received?.length > 0 &&
+        {requests?.[1]?.sent &&
+          requests[1].received?.length > 0 &&
           requests[1].received.map((pending: any, idx: number) => {
             const avatar = pending.sender.image_url || default_avatar
             return (
