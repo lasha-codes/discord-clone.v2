@@ -56,7 +56,7 @@ const PendingRequests = () => {
               </div>
             )
           })}
-        {requests?.[1]?.sent &&
+        {requests?.[1]?.received &&
           requests[1].received?.length > 0 &&
           requests[1].received.map((pending: any, idx: number) => {
             const avatar = pending.sender.image_url || default_avatar

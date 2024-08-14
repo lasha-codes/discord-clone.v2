@@ -37,7 +37,7 @@ const App = () => {
   useEffect(() => {
     const handlePushRequest = ({ request }: { request: any }) => {
       dispatch(add_request({ request }))
-      console.log('received')
+      console.log(request)
     }
 
     socket.on('push_request', handlePushRequest)

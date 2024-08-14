@@ -59,6 +59,22 @@ const user_slice = createSlice({
         }
       }
     },
+    remove_request: (state, { payload }) => {
+      const { member, deleteId }: { member: string; deleteId: string } = payload
+      if (member === 'sender') {
+        let sent_requests = state.requests[0].sent
+        sent_requests = sent_requests.filter((request: any) => {
+          return request.id !== deleteId
+        })
+        state.requests[0].sent = sent_requests
+      } else {
+        let received_requests = state.requests[1].received
+        received_requests = received_requests.filter((request: any) => {
+          return request.id !== deleteId
+        })
+        state.requests[1].received = received_requests
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(load_user_profile.pending, (state) => {
@@ -92,4 +108,4 @@ const user_slice = createSlice({
 })
 
 export default user_slice.reducer
-export const { add_request } = user_slice.actions
+export const { add_request, remove_request } = user_slice.actions

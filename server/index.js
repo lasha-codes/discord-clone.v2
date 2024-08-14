@@ -54,16 +54,20 @@ io.on('connection', (socket) => {
       if (received_member) {
         socket
           .to(received_member.socketId)
-          .emit('return_delete_request', { deleteId: deleted_request.id })
+          .emit('return_delete_request', {
+            deleteId: deleted_request.id,
+            member: 'receiver',
+          })
       }
     } else if (deleted_request.receiver_id === member_id) {
       const sender_member = connected_members.find((user) => {
         return user.id === deleted_request.sender_id
       })
       if (sender_member) {
-        socket
-          .to(sender_member.socketId)
-          .emit('return_delete_request', { deleteId: deleted_request.id })
+        socket.to(sender_member.socketId).emit('return_delete_request', {
+          deleteId: deleted_request.id,
+          member: 'sender',
+        })
       }
     }
   })
