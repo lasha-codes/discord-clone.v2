@@ -340,6 +340,7 @@ export const delete_request = async (req, res) => {
     const deleted_request = await db.requests.delete({
       where: { id: request_id },
     })
+    console.log(deleted_request)
     res.status(200).json({ deleted_request })
   } catch (err) {
     res.status(500).json({ message: err.message })

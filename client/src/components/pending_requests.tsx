@@ -4,11 +4,14 @@ import { IoClose } from 'react-icons/io5'
 import { IoCheckmark } from 'react-icons/io5'
 import axios from 'axios'
 import { socket } from '../App'
+import { useDispatch } from 'react-redux'
+import { remove_request } from '../library/slices/user'
 
 const PendingRequests = () => {
+  const dispatch = useDispatch()
   const { requests, account } = useSelector((state: any) => state.user)
 
-  const delete_request = async (request_id: string) => {
+  const delete_request = async (request_id: string, member: string) => {
     try {
       const {
         data: { deleted_request },
@@ -17,6 +20,7 @@ const PendingRequests = () => {
         deleted_request: deleted_request,
         member_id: account.id,
       })
+      dispatch(remove_request({ deleteId: request_id, member }))
     } catch (err) {
       console.log(err)
     }
@@ -48,7 +52,7 @@ const PendingRequests = () => {
                   </div>
                 </div>
                 <div
-                  onClick={() => delete_request(pending.id)}
+                  onClick={() => delete_request(pending.id, 'sender')}
                   className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'
                 >
                   <IoClose />
@@ -80,7 +84,7 @@ const PendingRequests = () => {
                 </div>
                 <div className='flex flex-row-reverse items-center gap-4'>
                   <div
-                    onClick={() => delete_request(pending.id)}
+                    onClick={() => delete_request(pending.id, 'receiver')}
                     className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-red-600'
                   >
                     <IoClose />

@@ -49,20 +49,20 @@ io.on('connection', (socket) => {
   socket.on('delete_request', ({ deleted_request, member_id }) => {
     if (deleted_request.sender_id === member_id) {
       const received_member = connected_members.find((user) => {
-        return user.id === deleted_request.receiver_id
+        return user.userId === deleted_request.receiver_id
       })
+      console.log(received_member)
       if (received_member) {
-        socket
-          .to(received_member.socketId)
-          .emit('return_delete_request', {
-            deleteId: deleted_request.id,
-            member: 'receiver',
-          })
+        socket.to(received_member.socketId).emit('return_delete_request', {
+          deleteId: deleted_request.id,
+          member: 'receiver',
+        })
       }
     } else if (deleted_request.receiver_id === member_id) {
       const sender_member = connected_members.find((user) => {
-        return user.id === deleted_request.sender_id
+        return user.userId === deleted_request.sender_id
       })
+      console.log('sender_member')
       if (sender_member) {
         socket.to(sender_member.socketId).emit('return_delete_request', {
           deleteId: deleted_request.id,

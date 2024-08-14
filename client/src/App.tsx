@@ -10,6 +10,7 @@ import {
   load_user_profile,
   fetch_pending_requests,
   add_request,
+  remove_request,
 } from './library/slices/user'
 import VerifyAccount from './authentication/pages/verify_account'
 import SentVerification from './authentication/pages/sent_verification'
@@ -40,10 +41,23 @@ const App = () => {
       console.log(request)
     }
 
+    const handleRemoveRequest = ({
+      deleteId,
+      member,
+    }: {
+      deleteId: string
+      member: string
+    }) => {
+      dispatch(remove_request({ deleteId, member }))
+      console.log('something')
+    }
+
     socket.on('push_request', handlePushRequest)
+    socket.on('return_delete_request', handleRemoveRequest)
 
     return () => {
       socket.off('push_request', handlePushRequest)
+      socket.off('return_delete_request', handlePushRequest)
     }
   }, [socket])
 
