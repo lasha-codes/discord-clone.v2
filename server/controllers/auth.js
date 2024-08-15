@@ -346,3 +346,27 @@ export const delete_request = async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 }
+
+export const get_friends = async (req, res) => {
+  const { token } = req.cookies
+  try {
+    if (!token) {
+      return res.json({ friends: null })
+    }
+
+    const {
+      member: { id },
+    } = jwt.verify(token, process.env.JWT_SECRET)
+
+    const friendsAsFirst = await db.friends.findMany({
+      where: { first_user_id: id },
+    })
+    const friendsAsSecond = await db.friends.findMany({
+      where: { second_user_id: id },
+    })
+
+    return res.status(200).json({ friendsAsFirst, friendsAsSecond })
+  } catch (err) {
+    res.status(500).json({ message })
+  }
+}

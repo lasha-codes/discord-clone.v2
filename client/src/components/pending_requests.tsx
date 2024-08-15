@@ -28,7 +28,7 @@ const PendingRequests = () => {
 
   return (
     <section className='px-10'>
-      <div className=''>
+      <div className='flex flex-col items-start gap-4'>
         {requests?.[0].sent &&
           requests[0].sent?.length > 0 &&
           requests[0].sent.map((pending: any, idx: number) => {
@@ -36,7 +36,7 @@ const PendingRequests = () => {
             return (
               <div
                 key={idx}
-                className='w-full flex justify-between items-center'
+                className='w-full flex justify-between request items-center border-b pb-4 border-gray-500'
               >
                 <div className='flex items-center gap-3'>
                   <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
@@ -67,7 +67,7 @@ const PendingRequests = () => {
             return (
               <div
                 key={idx}
-                className='w-full flex justify-between items-center'
+                className='w-full flex justify-between request items-center border-b pb-4 border-gray-500'
               >
                 <div className='flex items-center gap-3'>
                   <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
