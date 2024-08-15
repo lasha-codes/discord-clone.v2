@@ -10,6 +10,7 @@ import {
   get_pending_requests,
   delete_request,
   get_friends,
+  accept_request,
 } from '../controllers/auth.js'
 
 const router = express.Router()
@@ -19,6 +20,7 @@ router.post('/login', login)
 router.post('/verify_email', verify_email)
 router.post('/send_friend_request', send_friend_request)
 router.post('/delete_request', delete_request)
+router.post('/accept_request', accept_request)
 router.get('/get_member', get_member_info)
 router.get('/:id/verify/:token', verify_member)
 router.get('/get_token', get_token)

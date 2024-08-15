@@ -347,6 +347,30 @@ export const delete_request = async (req, res) => {
   }
 }
 
+export const accept_request = async () => {
+  const { receiver, sender } = req.body
+  try {
+    if (!sender || !receiver) {
+      return res
+        .status(422)
+        .json({ message: 'Server does not contain the valid data' })
+    }
+
+    const new_friends = await db.friends.create({
+      data: {
+        first_user: sender,
+        second_user: receiver,
+        first_user_id: sender.id,
+        second_user_id: receiver.id,
+      },
+    })
+
+    res.status(200).json({ friends: new_friends })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
 export const get_friends = async (req, res) => {
   const { token } = req.cookies
   try {

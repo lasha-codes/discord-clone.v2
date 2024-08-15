@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     dispatch(load_user_profile() as any)
     dispatch(fetch_pending_requests() as any)
-  }, [])
+  }, [account])
 
   useEffect(() => {
     if (!loading && account) {
