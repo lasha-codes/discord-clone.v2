@@ -25,9 +25,11 @@ const App = () => {
   const { account, loading } = useSelector((state: any) => state.user)
 
   useEffect(() => {
-    dispatch(load_user_profile() as any)
-    dispatch(fetch_pending_requests() as any)
-  }, [account])
+    if (!account) {
+      dispatch(load_user_profile() as any)
+      dispatch(fetch_pending_requests() as any)
+    }
+  }, [account, loading])
 
   useEffect(() => {
     if (!loading && account) {

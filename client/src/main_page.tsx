@@ -15,7 +15,7 @@ const MainPage = () => {
     if (!loading && account && !account.verified) {
       return navigate('/send_email_verification')
     }
-  }, [loading, account])
+  }, [account, loading])
 
   return (
     <div className='flex items-start bg-sidebar_color min-h-screen'>

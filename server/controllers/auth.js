@@ -347,14 +347,16 @@ export const delete_request = async (req, res) => {
   }
 }
 
-export const accept_request = async () => {
-  const { receiver, sender } = req.body
+export const accept_request = async (req, res) => {
+  const { receiver, sender, request_id } = req.body
   try {
     if (!sender || !receiver) {
       return res
         .status(422)
         .json({ message: 'Server does not contain the valid data' })
     }
+
+    await db.requests.delete({ where: { id: request_id } })
 
     const new_friends = await db.friends.create({
       data: {

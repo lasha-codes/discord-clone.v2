@@ -26,6 +26,25 @@ const PendingRequests = () => {
     }
   }
 
+  const accept_friend_request = async (request_id: string, sender: any) => {
+    try {
+      const {
+        data: { friends },
+      } = await axios.post('/auth/accept_request', {
+        request_id,
+        sender,
+        receiver: account,
+      })
+      if (friends) {
+        console.log(friends)
+      } else {
+        console.log('something went wrong')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <section className='px-10'>
       <div className='flex flex-col items-start gap-4'>
@@ -89,7 +108,12 @@ const PendingRequests = () => {
                   >
                     <IoClose />
                   </div>
-                  <div className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-green-500'>
+                  <div
+                    onClick={() =>
+                      accept_friend_request(pending.id, pending.sender)
+                    }
+                    className='p-2.5 rounded-full bg-sidebar_color/80 cursor-pointer hover:bg-sidebar_color transition-all duration-200 ease-out text-2xl text-green-500'
+                  >
                     <IoCheckmark />
                   </div>
                 </div>
