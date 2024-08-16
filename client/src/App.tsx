@@ -11,6 +11,7 @@ import {
   fetch_pending_requests,
   add_request,
   remove_request,
+  fetch_friends,
 } from './library/slices/user'
 import VerifyAccount from './authentication/pages/verify_account'
 import SentVerification from './authentication/pages/sent_verification'
@@ -28,6 +29,7 @@ const App = () => {
     if (!account) {
       dispatch(load_user_profile() as any)
       dispatch(fetch_pending_requests() as any)
+      dispatch(fetch_friends() as any)
     }
   }, [account, loading])
 

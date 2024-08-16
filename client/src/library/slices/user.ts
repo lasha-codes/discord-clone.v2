@@ -3,11 +3,17 @@ import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+type friends = {
+  friendsAsFirst: any[]
+  friendsAsSecond: any[]
+}
+
 type initialState = {
   account: null | any
   requests: any[]
   loading: boolean
   requests_loading: boolean
+  friends: friends
 }
 
 const initial_state: initialState = {
@@ -15,6 +21,10 @@ const initial_state: initialState = {
   loading: true,
   requests: [],
   requests_loading: true,
+  friends: {
+    friendsAsFirst: [],
+    friendsAsSecond: [],
+  },
 }
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {
@@ -40,6 +50,16 @@ export const fetch_pending_requests = createAsyncThunk(
   }
 )
 
+export const fetch_friends = createAsyncThunk('fetch_friends', async () => {
+  try {
+    const {
+      data: { friendsAsFirst, friendsAsSecond },
+    } = await axios.get('/auth/get_friends')
+    return { friendsAsFirst, friendsAsSecond }
+  } catch (err: any) {
+    console.log(err.message)
+  }
+})
 const user_slice = createSlice({
   initialState: initial_state,
   name: 'user',
@@ -104,6 +124,10 @@ const user_slice = createSlice({
         console.log(state.requests)
       }
     )
+    builder.addCase(fetch_friends.fulfilled, (state, { payload }) => {
+      state.friends.friendsAsFirst = payload?.friendsAsFirst
+      state.friends.friendsAsSecond = payload?.friendsAsSecond
+    })
   },
 })
 
