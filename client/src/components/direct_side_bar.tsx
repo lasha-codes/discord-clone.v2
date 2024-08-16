@@ -1,6 +1,7 @@
 import { LuPlus } from 'react-icons/lu'
 import UserBottom from './user_bottom'
 import friends_icon from '../assets/friends_icon.png'
+import Friends from './friends'
 
 const DirectSideBar = () => {
   return (
@@ -19,6 +20,7 @@ const DirectSideBar = () => {
           <span>DIRECT MESSAGES</span>
           <LuPlus />
         </div>
+        <Friends />
       </div>
       <UserBottom />
     </div>
