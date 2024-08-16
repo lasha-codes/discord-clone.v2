@@ -5,7 +5,7 @@ import { IoCheckmark } from 'react-icons/io5'
 import axios from 'axios'
 import { socket } from '../App'
 import { useDispatch } from 'react-redux'
-import { remove_request } from '../library/slices/user'
+import { add_friend, remove_request } from '../library/slices/user'
 
 const PendingRequests = () => {
   const dispatch = useDispatch()
@@ -36,7 +36,18 @@ const PendingRequests = () => {
         receiver: account,
       })
       if (friends) {
-        console.log(friends)
+        socket.emit('accept_request', {
+          new_friends: friends,
+          sender,
+          requestId: request_id,
+        })
+        dispatch(
+          add_friend({
+            new_friends: friends,
+            friendAs: 'second',
+            requestId: request_id,
+          })
+        )
       } else {
         console.log('something went wrong')
       }

@@ -95,6 +95,27 @@ const user_slice = createSlice({
         state.requests[1].received = received_requests
       }
     },
+    add_friend: (state, { payload }) => {
+      const {
+        friendAs,
+        new_friends,
+        requestId,
+      }: { friendAs: 'second' | 'first'; new_friends: any; requestId: string } =
+        payload
+      if (friendAs === 'second') {
+        state.friends.friendsAsSecond.push(new_friends)
+      } else {
+        state.friends.friendsAsFirst.push(new_friends)
+      }
+      state.requests[0].sent = state.requests[0].sent.filter((request: any) => {
+        return request.id !== requestId
+      })
+      state.requests[1].received = state.requests[1].received.filter(
+        (request: any) => {
+          return request.id !== requestId
+        }
+      )
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(load_user_profile.pending, (state) => {
@@ -132,4 +153,4 @@ const user_slice = createSlice({
 })
 
 export default user_slice.reducer
-export const { add_request, remove_request } = user_slice.actions
+export const { add_request, remove_request, add_friend } = user_slice.actions

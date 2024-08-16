@@ -72,6 +72,18 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('accept_request', ({ new_friends, sender, requestId }) => {
+    const senderUser = connected_members.find((user) => {
+      return user.userId === sender.id
+    })
+
+    if (senderUser) {
+      socket
+        .to(senderUser.socketId)
+        .emit('return_accept_request', { new_friends, requestId })
+    }
+  })
+
   socket.on('disconnect', () => {
     connected_members = connected_members.filter((member) => {
       return member.socketId !== socket.id

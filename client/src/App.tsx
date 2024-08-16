@@ -12,6 +12,7 @@ import {
   add_request,
   remove_request,
   fetch_friends,
+  add_friend,
 } from './library/slices/user'
 import VerifyAccount from './authentication/pages/verify_account'
 import SentVerification from './authentication/pages/sent_verification'
@@ -56,12 +57,23 @@ const App = () => {
       console.log('something')
     }
 
+    const handleAddFriend = ({
+      new_friends,
+      requestId,
+    }: {
+      new_friends: any
+      requestId: string
+    }) => {
+      dispatch(add_friend({ new_friends, friendAs: 'first', requestId }))
+    }
+
     socket.on('push_request', handlePushRequest)
     socket.on('return_delete_request', handleRemoveRequest)
-
+    socket.on('return_accept_request', handleAddFriend)
     return () => {
       socket.off('push_request', handlePushRequest)
       socket.off('return_delete_request', handlePushRequest)
+      socket.off('return_accept_request', handleAddFriend)
     }
   }, [socket])
 
