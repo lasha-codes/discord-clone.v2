@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import SideScreen from './components/side_screen'
 import SideBar from './components/sidebar'
 import { useEffect } from 'react'

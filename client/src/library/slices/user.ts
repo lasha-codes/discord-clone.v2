@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { User } from '../../components/chat'
 
 type friends = {
   friendsAsFirst: any[]
@@ -14,6 +15,7 @@ type initialState = {
   loading: boolean
   requests_loading: boolean
   friends: friends
+  selected_friend: User | null
 }
 
 const initial_state: initialState = {
@@ -25,6 +27,7 @@ const initial_state: initialState = {
     friendsAsFirst: [],
     friendsAsSecond: [],
   },
+  selected_friend: null,
 }
 
 export const load_user_profile = createAsyncThunk('fetch_user', async () => {
@@ -116,6 +119,12 @@ const user_slice = createSlice({
         }
       )
     },
+    select_friend: (state, { payload }) => {
+      const { friend }: { friend: User } = payload
+      if (friend) {
+        state.selected_friend = friend
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(load_user_profile.pending, (state) => {
@@ -153,4 +162,5 @@ const user_slice = createSlice({
 })
 
 export default user_slice.reducer
-export const { add_request, remove_request, add_friend } = user_slice.actions
+export const { add_request, remove_request, add_friend, select_friend } =
+  user_slice.actions
