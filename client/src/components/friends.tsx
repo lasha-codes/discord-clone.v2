@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector } from 'react-redux'
 import default_avatar from '../assets/default_avatar.png'
 import { IoCloseOutline } from 'react-icons/io5'
 
 const Friends = () => {
   const { friends } = useSelector((state: any) => state.user)
+  if (!friends.friendsAsFirst) {
+    return
+  }
   return (
     <div className='flex flex-col items-start px-2'>
       {friends.friendsAsFirst.map((friend: any, idx: number) => {

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Routes, Route } from 'react-router-dom'
@@ -27,18 +28,23 @@ const App = () => {
   const { account, loading } = useSelector((state: any) => state.user)
 
   useEffect(() => {
-    if (!account) {
-      dispatch(load_user_profile() as any)
+    if (account) {
       dispatch(fetch_pending_requests() as any)
       dispatch(fetch_friends() as any)
     }
-  }, [account, loading])
+  }, [account])
+
+  useEffect(() => {
+    if (!account) {
+      dispatch(load_user_profile() as any)
+    }
+  }, [account])
 
   useEffect(() => {
     if (!loading && account) {
       socket.emit('get_user_data', { userId: account.id })
     }
-  }, [loading, account, socket])
+  }, [socket, account])
 
   useEffect(() => {
     const handlePushRequest = ({ request }: { request: any }) => {

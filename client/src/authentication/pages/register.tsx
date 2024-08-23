@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import login_bg from '../assets/login_bg.webp'
 import discord_logo from '../assets/discord_logo.svg'
 import RegisterForm from '../components/register_form'
@@ -16,6 +18,7 @@ const RegisterPage = () => {
         return navigate('/')
       }
     }
+    console.log('verification sent')
   }, [verification_sent, loading])
 
   return (
