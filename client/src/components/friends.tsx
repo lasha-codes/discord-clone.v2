@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import default_avatar from '../assets/default_avatar.png'
 import { IoCloseOutline } from 'react-icons/io5'
+import { select_friend } from '../library/slices/user'
 
 const Friends = () => {
+  const dispatch = useDispatch()
   const { friends } = useSelector((state: any) => state.user)
   if (!friends.friendsAsFirst) {
     return
@@ -13,6 +15,9 @@ const Friends = () => {
       {friends.friendsAsFirst.map((friend: any, idx: number) => {
         return (
           <div
+            onClick={() =>
+              dispatch(select_friend({ friend: friend, friendAs: 'first' }))
+            }
             key={idx}
             className='w-full rounded-lg transition-all duration-[100ms] group hover:bg-gray-500/10 py-1.5 cursor-pointer flex items-center justify-between px-3'
           >
@@ -31,6 +36,9 @@ const Friends = () => {
       {friends.friendsAsSecond.map((friend: any, idx: number) => {
         return (
           <div
+            onClick={() =>
+              dispatch(select_friend({ friend: friend, friendAs: 'second' }))
+            }
             key={idx}
             className='w-full rounded-lg transition-all duration-[100ms] group hover:bg-gray-500/10 py-1.5 cursor-pointer flex items-center justify-between px-3'
           >

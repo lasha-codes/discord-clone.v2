@@ -120,9 +120,16 @@ const user_slice = createSlice({
       )
     },
     select_friend: (state, { payload }) => {
-      const { friend }: { friend: User } = payload
+      const {
+        friend,
+        friendAs,
+      }: { friend: any; friendAs: 'first' | 'second' } = payload
       if (friend) {
-        state.selected_friend = friend
+        if (friendAs === 'first') {
+          state.selected_friend = friend.second_user
+        } else {
+          state.selected_friend = friend.first_user
+        }
       }
     },
   },
