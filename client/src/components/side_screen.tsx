@@ -15,20 +15,21 @@ const SideScreen = () => {
   )
 
   console.log(selected_friend)
-
   return (
     <section className='w-full flex items-start relative overflow-hidden h-[96.5vh] bg-bg_color mt-auto rounded-tl-[9px]'>
       <div className='flex items-start h-full min-w-full'>
         <DirectSideBar />
         {selected_friend && <Chat user={selected_friend} />}
+        <div className='mt-[75px] w-full'>
+          {selected_direct_nav === 'add_friend' && <SendFriendRequest />}
+          {selected_direct_nav === 'Pending' && <PendingRequests />}
+        </div>
       </div>
       <DirectTopBar />
-      <div className='mt-[75px] w-full'>
-        {selected_direct_nav === 'add_friend' && <SendFriendRequest />}
-        {selected_direct_nav === 'Pending' && <PendingRequests />}
-      </div>
     </section>
   )
 }
+
+console.log('have to go')
 
 export default SideScreen

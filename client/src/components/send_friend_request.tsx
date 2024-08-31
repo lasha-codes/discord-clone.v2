@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import wampus_no_friends from '../assets/wampus_no_friends.png'
 import axios from 'axios'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector } from 'react-redux'
 import default_avatar from '../assets/default_avatar.png'
 import { IoClose } from 'react-icons/io5'
