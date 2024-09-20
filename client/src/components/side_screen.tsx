@@ -30,6 +30,6 @@ const SideScreen = () => {
   )
 }
 
-console.log('have to go')
+console.log('have to sleep')
 
 export default SideScreen
